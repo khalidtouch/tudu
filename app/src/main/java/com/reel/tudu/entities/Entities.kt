@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class TodoItem(
-    @PrimaryKey val itemId: Int,
+    @PrimaryKey(autoGenerate = true) val itemId: Int = 0,
     val task: String,
     val completionDay: Int? = null,
 )
