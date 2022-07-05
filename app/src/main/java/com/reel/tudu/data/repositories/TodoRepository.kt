@@ -7,32 +7,17 @@ import com.reel.tudu.data.TodoDb
 import com.reel.tudu.entities.CompletedTask
 import com.reel.tudu.entities.TodoItem
 
-class TodoRepository() {
-   // private val todoDao = TodoDb.instance(context).todoDao
-    suspend fun getAllTodoItems(): List<TodoItem> {
-      //  return todoDao.getAllTodoItems() //todo
-        return MockDb.todoItems
-    }
-/**
-    suspend fun getAllCompletedTasks(): List<CompletedTask> {
-        return todoDao.getAllCompletedTasks()
-    }
+interface TodoRepository {
+    suspend fun getAllTodoItems(): List<TodoItem>
 
-    suspend fun getCompletedTaskByDay(day: Int): CompletedTask {
-        return todoDao.getCompletedTaskByDay(day)
-    }
+    suspend fun getAllCompletedTasks(): List<CompletedTask>
 
-    suspend fun getTodoItemById(itemId: Int): TodoItem {
-        return todoDao.getTodoItemById(itemId)
-    }
+    suspend fun getCompletedTaskByDay(day: Int): CompletedTask
 
-    suspend fun saveTodoItem(todoItem: TodoItem) {
-        todoDao.saveTodoItem(todoItem)
-    }
+    suspend fun getTodoItemById(itemId: Int): TodoItem
 
-    suspend fun saveCompleteTask(completedTask: CompletedTask) {
-        todoDao.saveCompletedTask(completedTask)
-    }
+    suspend fun saveTodoItem(todoItem: TodoItem)
 
-    */
+    suspend fun saveCompletedTask(completedTask: CompletedTask)
 }
+

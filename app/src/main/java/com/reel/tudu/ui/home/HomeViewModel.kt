@@ -1,6 +1,5 @@
-package com.reel.tudu.viewmodels
+package com.reel.tudu.ui.home
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,11 +11,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
+import javax.inject.Inject
+import javax.inject.Provider
 import kotlin.coroutines.CoroutineContext
 
-class HomeViewModel : ViewModel() {
-    private val todoRepository = TodoRepository()
+class HomeViewModel @Inject constructor(
+    private val repository: TodoRepository
+) : ViewModel() {
     private val parentJob = Job()
     private val coroutineContext: CoroutineContext get() = parentJob + Dispatchers.Default
     private val scope = CoroutineScope(coroutineContext)
@@ -27,53 +28,68 @@ class HomeViewModel : ViewModel() {
 
     fun getAllTodoItems(): LiveData<List<TodoItem>> {
         scope.launch {
-            todoItemsLiveData.postValue(todoRepository.getAllTodoItems())
+            todoItemsLiveData.postValue(repository.getAllTodoItems())
         }
         return todoItemsLiveData
     }
-/**
+
     fun getAllCompletedTasks(): LiveData<List<CompletedTask>> {
         scope.launch {
-            completedTasksLiveData.postValue(todoRepository.getAllCompletedTasks())
+            completedTasksLiveData.postValue(repository.getAllCompletedTasks())
         }
         return completedTasksLiveData
     }
 
     fun getTodoItemById(itemId: Int): LiveData<TodoItem> {
         scope.launch {
-            todoItemLiveData.postValue(todoRepository.getTodoItemById(itemId))
+            todoItemLiveData.postValue(repository.getTodoItemById(itemId))
         }
         return todoItemLiveData
     }
 
     fun getCompletedTaskByDay(day: Int): LiveData<CompletedTask> {
         scope.launch {
-            completedTaskLiveData.postValue(todoRepository.getCompletedTaskByDay(day))
+            completedTaskLiveData.postValue(repository.getCompletedTaskByDay(day))
         }
         return completedTaskLiveData
     }
 
     fun saveTodoItem(todoItem: TodoItem) {
         scope.launch {
-            todoRepository.saveTodoItem(todoItem)
+            repository.saveTodoItem(todoItem)
         }
     }
 
     fun saveCompletedTask(completedTask: CompletedTask) {
         scope.launch {
-            todoRepository.saveCompleteTask(completedTask)
+            repository.saveCompletedTask(completedTask)
         }
     }
-    */
+
 }
 
-@Suppress("UNCHECKED_CAST")
-class HomeViewModelFactory : ViewModelProvider.Factory {
+//@Suppress("UNCHECKED_CAST")
+//class HomeViewModelFactory(private val repository: TodoRepository) : ViewModelProvider.Factory {
+//    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+//            return HomeViewModel(repository) as T
+//        }
+//        throw IllegalArgumentException("Not found ")
+//    }
+//
+//}
+
+
+class HomeViewModelFactory @Inject constructor(
+    homeViewModelProvider: Provider<HomeViewModel>
+) : ViewModelProvider.Factory {
+
+    private val providers = mapOf<Class<*>, Provider<out ViewModel>>(
+        HomeViewModel::class.java to homeViewModelProvider
+    )
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            return HomeViewModel() as T
-        }
-        throw IllegalArgumentException("Not found ")
+        return providers[modelClass]!!.get() as T
     }
 
 }

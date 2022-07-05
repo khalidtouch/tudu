@@ -17,10 +17,10 @@
     </fragment>
     <fragment
         android:id="@+id/completionFragment"
-        android:name="com.reel.tudu.fragments.CompletionFragment"
+        android:name="com.reel.tudu.ui.completed.CompletionFragment"
         android:label="CompletionFragment" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.reel.tudu.fragments.SettingsFragment"
+        android:name="com.reel.tudu.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
 </navigation>

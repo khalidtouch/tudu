@@ -1,4 +1,4 @@
-package com.reel.tudu.fragments
+package com.reel.tudu.ui.completed
 
 import androidx.fragment.app.Fragment
 import com.reel.tudu.R
