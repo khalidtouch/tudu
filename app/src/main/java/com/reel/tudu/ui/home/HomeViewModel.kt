@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.reel.tudu.data.repositories.TodoRepository
-import com.reel.tudu.entities.CompletedTask
 import com.reel.tudu.entities.TodoItem
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,9 +21,9 @@ class HomeViewModel @Inject constructor(
     private val coroutineContext: CoroutineContext get() = parentJob + Dispatchers.Default
     private val scope = CoroutineScope(coroutineContext)
     private val todoItemsLiveData = MutableLiveData<List<TodoItem>>()
-    private val completedTasksLiveData = MutableLiveData<List<CompletedTask>>()
+    private val completedTasksLiveData = MutableLiveData<List<TodoItem>>()
     private val todoItemLiveData = MutableLiveData<TodoItem>()
-    private val completedTaskLiveData = MutableLiveData<CompletedTask>()
+    private val completedTaskLiveData = MutableLiveData<TodoItem>()
 
     fun getAllTodoItems(): LiveData<List<TodoItem>> {
         scope.launch {
@@ -33,7 +32,7 @@ class HomeViewModel @Inject constructor(
         return todoItemsLiveData
     }
 
-    fun getAllCompletedTasks(): LiveData<List<CompletedTask>> {
+    fun getAllCompletedTasks(): LiveData<List<TodoItem>> {
         scope.launch {
             completedTasksLiveData.postValue(repository.getAllCompletedTasks())
         }
@@ -47,12 +46,6 @@ class HomeViewModel @Inject constructor(
         return todoItemLiveData
     }
 
-    fun getCompletedTaskByDay(day: Int): LiveData<CompletedTask> {
-        scope.launch {
-            completedTaskLiveData.postValue(repository.getCompletedTaskByDay(day))
-        }
-        return completedTaskLiveData
-    }
 
     fun saveTodoItem(todoItem: TodoItem) {
         scope.launch {
@@ -60,11 +53,6 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun saveCompletedTask(completedTask: CompletedTask) {
-        scope.launch {
-            repository.saveCompletedTask(completedTask)
-        }
-    }
 
 }
 

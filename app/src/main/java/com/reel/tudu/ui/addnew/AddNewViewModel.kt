@@ -1,6 +1,5 @@
 package com.reel.tudu.ui.addnew
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -20,7 +19,8 @@ class AddNewViewModel @Inject constructor(
     private val parentJob = Job()
     private val coroutineContext: CoroutineContext get() = parentJob + Dispatchers.Default
     private val scope = CoroutineScope(coroutineContext)
-    private val todoItemLiveData = MutableLiveData<TodoItem>()
+    private var _todoItemLiveData = MutableLiveData<TodoItem>()
+    val todoItemLiveData get() = _todoItemLiveData
 
     fun saveTodoItem(todoItem: TodoItem?) {
         scope.launch {
@@ -29,12 +29,15 @@ class AddNewViewModel @Inject constructor(
     }
 
     fun cacheTodoItem(todoItem: TodoItem?) {
-        todoItemLiveData.postValue(todoItem!!)
+        _todoItemLiveData.postValue(todoItem!!)
     }
 
-    fun getCachedTodoItem(): LiveData<TodoItem> {
-        return todoItemLiveData.value as LiveData<TodoItem>
+    fun clearTaskData() {
+        scope.launch {
+            _todoItemLiveData = MutableLiveData()
+        }
     }
+
 }
 
 

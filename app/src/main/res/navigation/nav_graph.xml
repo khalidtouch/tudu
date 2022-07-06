@@ -3,17 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/homeFragment">
-
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.reel.tudu.fragments.HomeFragment"
+        android:name="com.reel.tudu.ui.home.HomeFragment"
         android:label="HomeFragment" >
         <action
-            android:id="@+id/action_homeFragment_to_completionFragment"
-            app:destination="@id/completionFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_settingsFragment"
-            app:destination="@id/settingsFragment" />
+            android:id="@+id/action_homeFragment_to_addTodoBottomSheet"
+            app:destination="@id/addTodoBottomSheet" />
     </fragment>
     <fragment
         android:id="@+id/completionFragment"
@@ -23,4 +19,12 @@
         android:id="@+id/settingsFragment"
         android:name="com.reel.tudu.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
+    <dialog
+        android:id="@+id/addTodoBottomSheet"
+        android:name="com.reel.tudu.ui.addnew.AddTodoBottomSheet"
+        android:label="AddTodoBottomSheet" >
+        <action
+            android:id="@+id/action_addTodoBottomSheet_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </dialog>
 </navigation>

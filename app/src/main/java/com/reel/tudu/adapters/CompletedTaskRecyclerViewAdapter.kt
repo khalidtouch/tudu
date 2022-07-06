@@ -1,31 +1,28 @@
 package com.reel.tudu.adapters
 
+
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.reel.tudu.databinding.LayoutTodoItemBinding
+import com.reel.tudu.databinding.LayoutCompletedTaskItemBinding
 import com.reel.tudu.entities.TodoItem
 
-class HomeRecyclerViewAdapter(val callback: ((TodoItem) -> Unit)? = null) :
-    ListAdapter<TodoItem, HomeRecyclerViewAdapter.ViewHolder>(TodoItemDiffCallback()) {
+class CompletedTaskRecyclerViewAdapter :
+    ListAdapter<TodoItem, CompletedTaskRecyclerViewAdapter.ViewHolder>(CompletedTaskDiffCallback()) {
 
-    inner class ViewHolder(private val binding: LayoutTodoItemBinding) :
+    inner class ViewHolder(private val binding: LayoutCompletedTaskItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(todoItem: TodoItem) {
-            binding.TodoTask.text = todoItem.task
-            binding.TodoCheckbox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) callback?.let { callback -> callback(todoItem) }
-            }
+            binding.CompletedTaskName.text = todoItem.task
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         return ViewHolder(
-            LayoutTodoItemBinding.inflate(inflater, parent, false)
+            LayoutCompletedTaskItemBinding.inflate(inflater, parent, false)
         )
     }
 
@@ -34,11 +31,10 @@ class HomeRecyclerViewAdapter(val callback: ((TodoItem) -> Unit)? = null) :
             bind(getItem(position))
         }
     }
-
-
 }
 
-class TodoItemDiffCallback : DiffUtil.ItemCallback<TodoItem>() {
+
+class CompletedTaskDiffCallback : DiffUtil.ItemCallback<TodoItem>() {
     override fun areItemsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean =
         oldItem.itemId == newItem.itemId
 

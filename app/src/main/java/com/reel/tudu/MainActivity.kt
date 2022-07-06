@@ -2,18 +2,23 @@ package com.reel.tudu
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.Navigation
+
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
+
 import androidx.navigation.ui.setupWithNavController
 import com.reel.tudu.databinding.ActivityMainBinding
+import com.reel.tudu.di.component.ApplicationComponent
 
 class MainActivity : AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
-    val binding get() = _binding
+    private val binding get() = _binding
+
+    lateinit var applicationComponent: ApplicationComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        applicationComponent = (application as InitApp).applicationComponent
+
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 

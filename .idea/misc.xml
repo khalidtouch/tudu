@@ -5,11 +5,13 @@
       <map>
         <entry key="app/src/main/res/drawable/ic_settings_24.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.15" />
-        <entry key="app/src/main/res/layout/fragment_completion.xml" value="0.19270833333333334" />
-        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_completion.xml" value="0.15" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_settings.xml" value="0.19270833333333334" />
-        <entry key="app/src/main/res/layout/layout_add_todo_dialog.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/layout_todo_item.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/layout_add_todo_dialog.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/layout_completed_task.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/layout_completed_task_item.xml" value="0.22962962962962963" />
+        <entry key="app/src/main/res/layout/layout_todo_item.xml" value="0.33" />
         <entry key="app/src/main/res/menu/navigation_menu.xml" value="0.19270833333333334" />
       </map>
     </option>

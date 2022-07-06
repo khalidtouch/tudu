@@ -1,30 +1,49 @@
 package com.reel.tudu.ui.addnew
 
-import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
-import com.reel.tudu.InitApp
+import com.reel.tudu.MainActivity
 import com.reel.tudu.R
 import com.reel.tudu.entities.TodoItem
+import com.reel.tudu.ui.home.HomeFragment
+import com.reel.tudu.ui.home.HomeViewModel
+import com.reel.tudu.ui.home.HomeViewModelFactory
+import javax.inject.Inject
 
 class AddTodoBottomSheet : BottomSheetDialogFragment(), OnEditTodoItemListener {
 
 
+    @Inject
+    lateinit var addNewViewModelFactory: AddNewViewModelFactory
 
-
+    lateinit var addNewViewModel: AddNewViewModel
     private lateinit var addNewCancelBtn: MaterialButton
     private lateinit var addNewSaveBtn: MaterialButton
     private lateinit var addNewEditText: TextInputEditText
+
+    private lateinit var parentFragment: HomeFragment
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity as MainActivity).applicationComponent.homeFragmentComponent().create()
+            .inject(this)
+
+        addNewViewModel = ViewModelProvider(
+            activity as MainActivity,
+            addNewViewModelFactory
+        )[AddNewViewModel::class.java]
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,21 +56,22 @@ class AddTodoBottomSheet : BottomSheetDialogFragment(), OnEditTodoItemListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        parentFragment = HomeFragment()
         bindViews(view)
         handleEvents()
     }
 
+
     private fun handleEvents() {
         addNewEditText.addTextChangedListener(onTextChanged = { text, _, _, _ ->
-            viewModel.cacheTodoItem(TodoItem(task = text.toString()))
+            addNewViewModel.cacheTodoItem(TodoItem(task = text.toString()))
         })
 
-        viewModel.getCachedTodoItem().observe(viewLifecycleOwner) { todoItem ->
-            addNewSaveBtn.setOnClickListener { onSave(todoItem) }
-        }
-
         addNewCancelBtn.setOnClickListener { onAbort() }
+
+        addNewSaveBtn.setOnClickListener { onSave() }
     }
+
 
     private fun bindViews(view: View) {
         addNewCancelBtn = view.findViewById(R.id.AddNewCancelButton)
@@ -63,9 +83,16 @@ class AddTodoBottomSheet : BottomSheetDialogFragment(), OnEditTodoItemListener {
         val TAG = "AddTodoDialogFragment"
     }
 
-    override fun onSave(todoItem: TodoItem?) {
-        if (todoItem != null) viewModel.saveTodoItem(todoItem)
+    override fun onSave() {
+        addNewViewModel.todoItemLiveData.observe(viewLifecycleOwner) {
+            if (it != null) {
+                addNewViewModel.saveTodoItem(it)
+            }
+        }
+        addNewViewModel.clearTaskData()
         this.dismiss()
+        findNavController().navigate(R.id.action_addTodoBottomSheet_to_homeFragment)
+        Log.i(TAG, "onSave: Task saved")
     }
 
     override fun onTextChange() {
@@ -74,12 +101,14 @@ class AddTodoBottomSheet : BottomSheetDialogFragment(), OnEditTodoItemListener {
 
     override fun onAbort() {
         this.dismiss()
+        findNavController().navigate(R.id.action_addTodoBottomSheet_to_homeFragment)
+
     }
 }
 
 
 interface OnEditTodoItemListener {
-    fun onSave(todoItem: TodoItem?)
+    fun onSave()
     fun onTextChange()
     fun onAbort()
 }
